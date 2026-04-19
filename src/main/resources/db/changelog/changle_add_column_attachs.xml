@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1775578263309-1" author="Mai Hien">
+        <createTable tableName="attach">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="create_at" type="TIMESTAMP"/>
+            <column name="update_at" type="TIMESTAMP"/>
+
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="description" type="VARCHAR(200)"/>
+            <column name="is_active" type="INTEGER" defaultValueNumeric="1"/>
+
+            <column name="type" type="INT4"/>
+
+            <column name="module_id" type="BIGINT"/>
+            <column name="owner_id" type="BIGINT"/>
+
+            <column name="attach_metadata" type="JSONB"/>
+            <column name="attach_storage_metadata" type="JSONB"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
