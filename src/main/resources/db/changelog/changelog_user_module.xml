@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1775409104266-1" author="Mai Hien">
+        <createTable tableName="users">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)"/>
+            <column name="gender" type="int4"/>
+            <column name="address" type="varchar(250)"/>
+            <column name="is_active" type="int4" defaultValue="1"/>
+            <column name="create_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="email" type="varchar(250)">
+                <constraints unique="true"/>
+            </column>
+            <column name="phone_number" type="varchar(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="hash" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salt" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(250)"/>
+            <column name="code" type="varchar(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="is_active" type="int4" defaultValue="1"/>
+        </createTable>
+
+        <createTable tableName="objects">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)"/>
+            <column name="description" type="varchar(250)"/>
+            <column name="code" type="varchar(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="is_actives" type="int4" defaultValue="1"/>
+        </createTable>
+
+        <createTable tableName="users_roles">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_active" type="int4" defaultValue="1"/>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_users_roles_user" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_users_roles_role" referencedTableName="roles" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="roles_object">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_active" type="int4" defaultValue="1"/>
+            <column name="role_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_roles_object_role" referencedTableName="roles" referencedColumnNames="id"/>
+            </column>
+            <column name="object_id" type="int4">
+                <constraints nullable="false" foreignKeyName="fk_roles_object_object" referencedTableName="objects" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

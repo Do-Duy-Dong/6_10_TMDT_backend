@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1776534386587-1" author="Mai Hien">
+        <createTable tableName="posts">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="title" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_by" type="bigint"/>
+            <column name="status" type="int4"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

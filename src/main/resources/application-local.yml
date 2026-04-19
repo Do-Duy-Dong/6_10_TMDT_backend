@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: shop_service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/laptop_shop
+    username: admin
+    password: admin
+    hikari:
+      leak-detection-threshold: 30000
+      maximum-pool-size: 2
+      validation-timeout: 5000
+      connection-timeout: 10000
+
+  liquibase:
+    enabled: off
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  session:
+    jdbc:
+      initialize-schema: always
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: "/swagger-ui.html"
+    operations-sorter: method
+  api-docs:
+    resolve-schema-properties: true
+    resolve-extensions-properties: true
