@@ -1,6 +1,9 @@
 package com.tmdt.shop_service.modules.auth.application.service;
 
+import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
+import com.tmdt.shop_service.modules.auth.application.dto.AuthTokenDto;
 import com.tmdt.shop_service.modules.auth.application.dto.SignUpDto;
+import com.tmdt.shop_service.modules.auth.application.request.LoginRequest;
 import com.tmdt.shop_service.modules.users.application.dto.UserDto;
 import com.tmdt.shop_service.modules.users.application.mapper.UserMapper;
 import com.tmdt.shop_service.modules.users.application.service.RoleService;
@@ -10,9 +13,11 @@ import com.tmdt.shop_service.modules.users.domain.model.Role;
 import com.tmdt.shop_service.modules.users.domain.model.UserRole;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.utils.Constant;
+import com.tmdt.shop_service.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     final UserService userService;
     final RoleService roleService;
     final UserRoleService userRoleService;
+    final JwtUtils jwtUtils;
 
     @Override
     public UserDto signUp(SignUpDto dto) {
@@ -32,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
         users.setPhoneNumber(dto.getPhoneNumber());
         users.setAddress(dto.getAddress());
         users.setHash(passwordEncoder.encode(dto.getPassword()));
+        users.setSalt("more salt");
         users = userService.save(users);
 
         Role roleDefault = roleService.getRoleDefault();
@@ -43,5 +50,37 @@ public class AuthServiceImpl implements AuthService {
         userRoleService.save(userRole);
 
         return UserMapper.INSTANCE.toDto(users);
+    }
+
+    @Override
+    public AuthTokenDto login(LoginRequest request) {
+        Users users = userService.findByEmail(request.getEmail());
+        if (users == null) {
+            throw new ResourceNotFoundException("Users not found");
+        }
+
+//        if (!passwordEncoder.matches(request.getPassword(), users.getHash())) {
+//            throw new UnAuthorizationException("");
+//        }
+
+        return generateToken(users);
+    }
+
+    @Override
+    public AuthTokenDto refreshToken(Long userId) {
+        Users users = userService.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Users not found")
+        );
+
+        return generateToken(users);
+    }
+
+    @Override
+    public AuthTokenDto generateToken(Users users) {
+        String accessToken = jwtUtils.generateAccessToken(users);
+        return new AuthTokenDto(
+                accessToken,
+                "",
+                jwtUtils.getExpriry());
     }
 }

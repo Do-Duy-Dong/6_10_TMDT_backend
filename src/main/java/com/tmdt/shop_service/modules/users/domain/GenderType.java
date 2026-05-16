@@ -19,6 +19,9 @@ public enum GenderType implements HasEnumValue {
 
         @Override
         public Integer convertToDatabaseColumn(GenderType attribute) {
+            if (attribute == null) {
+                return null;
+            }
             return attribute.getValue();
         }
 
