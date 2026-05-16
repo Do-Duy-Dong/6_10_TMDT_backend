@@ -3,9 +3,9 @@ spring:
     name: shop_service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/laptop_shop
-    username: admin
-    password: admin
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/laptop_shop}
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:admin}
     hikari:
       leak-detection-threshold: 30000
       maximum-pool-size: 2
