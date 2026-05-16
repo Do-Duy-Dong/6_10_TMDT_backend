@@ -12,4 +12,6 @@ public interface UsersRepository {
     Optional<Users> findByPhoneNumber(String phoneNumber);
 
     Users update(Users users);
+
+    Optional<Users> findById(Long userId);
 }

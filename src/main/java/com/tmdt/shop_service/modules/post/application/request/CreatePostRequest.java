@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,4 +23,9 @@ public class CreatePostRequest {
 
     @NotNull
     private PostStatus status;
+
+    @NotNull @NotBlank
+    private String slug;
+
+    private List<Long> attachIds;
 }

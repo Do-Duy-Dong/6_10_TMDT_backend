@@ -21,4 +21,7 @@ public class UpdatePostRequest {
 
     @NotNull
     private PostStatus status;
+
+    @NotNull @NotBlank
+    private String slug;
 }

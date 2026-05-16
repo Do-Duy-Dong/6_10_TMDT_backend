@@ -30,6 +30,12 @@ import java.util.List;
 public class AdminPostController {
     final PostService postService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+        var result = postService.getById(id);
+        return ResponseEntity.ok().body(result);
+    }
+
     @PostMapping
     public ResponseEntity<PostDto> createPost(
             @RequestBody CreatePostRequest request,

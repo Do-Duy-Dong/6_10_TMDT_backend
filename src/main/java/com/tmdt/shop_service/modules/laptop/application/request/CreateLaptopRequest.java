@@ -3,8 +3,10 @@ package com.tmdt.shop_service.modules.laptop.application.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.aop.target.LazyInitTargetSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class CreateLaptopRequest {
@@ -19,4 +21,6 @@ public class CreateLaptopRequest {
 
     @NotNull(message = "Giá không được để trống")
     private BigDecimal originalPrice;
+
+    private List<Long> attachIds;
 }

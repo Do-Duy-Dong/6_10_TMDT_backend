@@ -1,14 +1,13 @@
 package com.tmdt.shop_service.modules.users.application.service;
 
 import com.tmdt.shop_service.core.exception.DuplicateResourceException;
-import com.tmdt.shop_service.modules.auth.application.dto.SignUpDto;
-import com.tmdt.shop_service.modules.users.application.dto.UserDto;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.modules.users.domain.repo.UsersRepository;
-import com.tmdt.shop_service.utils.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +31,10 @@ public class UserServiceImpl implements UserService {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateResourceException("Email or phone number already in use");
         }
+    }
+
+    @Override
+    public Optional<Users> findById(Long userId) {
+        return usersRepository.findById(userId);
     }
 }

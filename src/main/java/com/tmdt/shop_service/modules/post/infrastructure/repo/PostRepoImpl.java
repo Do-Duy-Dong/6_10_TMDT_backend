@@ -98,7 +98,7 @@ public class PostRepoImpl implements PostRepo {
             }
         }
         paging = paging.substring(0, paging.length() - 2) + "\n";
-        paging = "limit " + pageable.getPageSize() + " offset " + pageable.getOffset() + "\n";
+        paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset() + "\n";
         return paging;
     }
 }

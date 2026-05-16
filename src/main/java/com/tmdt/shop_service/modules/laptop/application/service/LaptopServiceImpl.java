@@ -1,6 +1,8 @@
 package com.tmdt.shop_service.modules.laptop.application.service;
 
 import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
+import com.tmdt.shop_service.modules.attaches.application.service.AttachService;
+import com.tmdt.shop_service.modules.attaches.domain.AttachType;
 import com.tmdt.shop_service.modules.laptop.application.dto.LaptopDto;
 import com.tmdt.shop_service.modules.laptop.application.mapper.LaptopMapper;
 import com.tmdt.shop_service.modules.laptop.application.request.CreateLaptopRequest;
@@ -22,6 +24,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class LaptopServiceImpl implements LaptopService {
     final LaptopRepo laptopRepo;
+    final AttachService attachService;
 
     @Override
     public LaptopDto create(@NotNull CreateLaptopRequest request, @NotNull Long userId) {
@@ -34,6 +37,10 @@ public class LaptopServiceImpl implements LaptopService {
         );
 
         laptop = laptopRepo.save(laptop);
+
+        if(request.getAttachIds() != null && !request.getAttachIds().isEmpty()) {
+            attachService.assignAttachesForEntity(request.getAttachIds(), laptop.getId(), AttachType.LAP_TOP);
+        }
         return LaptopMapper.INSTANCE.toDto(laptop);
     }
 
