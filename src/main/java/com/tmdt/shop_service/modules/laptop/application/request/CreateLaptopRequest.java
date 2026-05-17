@@ -23,4 +23,27 @@ public class CreateLaptopRequest {
     private BigDecimal originalPrice;
 
     private List<Long> attachIds;
+
+    private Long parentId;
+
+    @NotNull
+    private Long brandId;
+
+    @NotNull
+    private Long ramId;
+
+    @NotNull
+    private Long storageId;
+
+    @NotNull
+    private Long screenSizeId;
+
+    @NotNull
+    private Long gpuId;
+
+    @NotNull
+    private Long cpuId;
+
+    @NotNull
+    private Long screenId;
 }

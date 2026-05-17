@@ -12,24 +12,30 @@ public class StringUtils {
         return "%" + str.toLowerCase().trim() + "%";
     }
 
-    public static String genDirection(List<String> sortFields, Pageable pageable) {
-        String paging = "order by ";
+    public static String genDirection(List<String> sortFields, Pageable pageable, String alias) {
+        if (pageable == null) {
+            return "";
+        }
+        String paging = "";
         boolean hasSort = false;
         pageable.getSort();
         if (pageable.getSort().isSorted()) {
+            paging = "order by ";
             for (Sort.Order order : pageable.getSort()) {
                 if (sortFields.contains(order.getProperty())) {
-                    paging += order.getProperty() + " " + order.getDirection() + ", ";
+                    if (alias != null && !alias.isEmpty()) {
+                        paging += alias + "." +order.getProperty() + " " + order.getDirection() + ", ";
+                    } else {
+                        paging += order.getProperty() + " " + order.getDirection() + ", ";
+                    }
                     hasSort = true;
                 }
             }
         }
         if (hasSort) {
             paging = paging.substring(0, paging.length() - 2) + "\n";
-        } else {
-            paging = "order by create_at desc\n";
         }
-        paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset() + "\n";
+        paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset();
         return paging;
     }
 }

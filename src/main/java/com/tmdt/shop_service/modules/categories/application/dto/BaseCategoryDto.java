@@ -9,14 +9,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
+public class BaseCategoryDto {
     private Long id;
     private String name;
     private String code;
     private Integer isActive;
-    private Long baseCodeId;
-    private String baseCode;
-    private String baseCodeName;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 }

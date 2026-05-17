@@ -33,8 +33,15 @@ public class LaptopServiceImpl implements LaptopService {
                 request.getDescription(),
                 request.getIsActive(),
                 userId,
-                request.getOriginalPrice()
-        );
+                request.getOriginalPrice(),
+                request.getParentId(),
+                request.getBrandId(),
+                request.getRamId(),
+                request.getStorageId(),
+                request.getScreenSizeId(),
+                request.getGpuId(),
+                request.getCpuId(),
+                request.getScreenId());
 
         laptop = laptopRepo.save(laptop);
 

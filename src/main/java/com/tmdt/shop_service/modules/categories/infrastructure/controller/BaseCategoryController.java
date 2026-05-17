@@ -1,9 +1,8 @@
 package com.tmdt.shop_service.modules.categories.infrastructure.controller;
 
 import com.tmdt.shop_service.core.dto.CollectionResponse;
-import com.tmdt.shop_service.modules.categories.application.dto.CategoryDto;
-import com.tmdt.shop_service.modules.categories.application.service.CategoryService;
-import com.tmdt.shop_service.modules.categories.application.service.ModuleCategoryService;
+import com.tmdt.shop_service.modules.categories.application.dto.BaseCategoryDto;
+import com.tmdt.shop_service.modules.categories.application.service.BaseCategoryService;
 import com.tmdt.shop_service.utils.Constant;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/public/categories")
-@Tag(name = "Public api for category")
-public class CategoryController {
-    final CategoryService categoryService;
-    final ModuleCategoryService moduleCategoryService;
+@RequestMapping("/v1/public/base-categories")
+@Tag(name = "Public api for base category")
+public class BaseCategoryController {
+    final BaseCategoryService baseCategoryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getById(@PathVariable Long id) {
-        var result = categoryService.getByIdHasStatusActive(id);
+    public ResponseEntity<BaseCategoryDto> getById(@PathVariable Long id) {
+        var result = baseCategoryService.getByIdHasStatusActive(id);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping
-    public CollectionResponse<CategoryDto> getList(
+    public CollectionResponse<BaseCategoryDto> getList(
             @ParameterObject
             @PageableDefault(
                     page = 0,
@@ -38,10 +36,10 @@ public class CategoryController {
                     sort = "create_at",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "name:ct", required = false) String nameCt,
-            @RequestParam(value = "code:eq", required = false) String codeEq,
-            @RequestParam(value = "baseCode:eq", required = false) String baseCodeEq) {
+            @RequestParam(value = "code:eq", required = false) String codeEq) {
 
-        Page<CategoryDto> page = categoryService.getList(pageable, nameCt, codeEq, baseCodeEq, Constant.STATUS.ACTIVE);
+        // For public, we always force isActive = Constant.STATUS.ACTIVE
+        Page<BaseCategoryDto> page = baseCategoryService.getList(pageable, nameCt, codeEq, Constant.STATUS.ACTIVE);
         Integer nextPage = page.hasNext() ? page.getNumber() + 1 : null;
         return new CollectionResponse<>(
                 page.getContent(),
