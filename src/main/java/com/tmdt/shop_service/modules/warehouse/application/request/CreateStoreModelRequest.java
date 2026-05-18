@@ -5,13 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CreateStoreModelRequest {
     @NotNull(message = "Warehouse ID không được để trống")
     private Long warehouseId;
 
-    @NotBlank(message = "Serial number không được để trống")
-    private String serialNumber;
+    @NotNull
+    private List<String> serialNumbers;
 
     @NotNull(message = "Laptop ID không được để trống")
     private Long laptopId;

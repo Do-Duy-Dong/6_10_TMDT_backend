@@ -10,6 +10,7 @@ import com.tmdt.shop_service.modules.post.application.request.UpdatePostRequest;
 import com.tmdt.shop_service.modules.post.domain.PostStatus;
 import com.tmdt.shop_service.modules.post.domain.model.Post;
 import com.tmdt.shop_service.modules.post.domain.repo.PostRepo;
+import com.tmdt.shop_service.utils.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class PostServiceImpl implements PostService {
                 userId,
                 null,
                 request.getStatus(),
-                generatorSlug(request.getSlug()));
+                StringUtils.generatorSlug(request.getSlug()));
 
         post = postRepo.save(post);
 
@@ -59,7 +60,7 @@ public class PostServiceImpl implements PostService {
         post.setDescription(request.getDescription());
         post.setUpdateBy(userId);
         post.setStatus(request.getStatus());
-        post.setSlug(generatorSlug(request.getSlug()));
+        post.setSlug(StringUtils.generatorSlug(request.getSlug()));
         post  = postRepo.save(post);
         return PostMapper.INSTANCE.toDto(post);
     }
@@ -109,10 +110,5 @@ public class PostServiceImpl implements PostService {
             throw new ResourceNotFoundException("Post Not Found");
         }
         return postDto;
-    }
-
-    private String generatorSlug(String baseSlug) {
-        LocalDateTime now = LocalDateTime.now();
-        return baseSlug + "_" + now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 }

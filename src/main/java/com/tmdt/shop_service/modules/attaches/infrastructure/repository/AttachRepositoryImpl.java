@@ -1,5 +1,6 @@
 package com.tmdt.shop_service.modules.attaches.infrastructure.repository;
 
+import com.tmdt.shop_service.modules.attaches.domain.AttachType;
 import com.tmdt.shop_service.modules.attaches.domain.model.Attaches;
 import com.tmdt.shop_service.modules.attaches.domain.repo.AttachRepository;
 import com.tmdt.shop_service.modules.attaches.infrastructure.jpa.JpaAttachRepository;
@@ -26,5 +27,10 @@ public class AttachRepositoryImpl implements AttachRepository {
     @Override
     public void saveAll(List<Attaches> attaches) {
         jpaAttachRepository.saveAll(attaches);
+    }
+
+    @Override
+    public List<Attaches> findAttachByEntity(Long entityId, AttachType type) {
+        return jpaAttachRepository.findByModuleIdAndType(entityId, type);
     }
 }

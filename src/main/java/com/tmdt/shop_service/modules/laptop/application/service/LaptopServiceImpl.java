@@ -1,6 +1,7 @@
 package com.tmdt.shop_service.modules.laptop.application.service;
 
 import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
+import com.tmdt.shop_service.modules.attaches.application.dto.AttachDto;
 import com.tmdt.shop_service.modules.attaches.application.service.AttachService;
 import com.tmdt.shop_service.modules.attaches.domain.AttachType;
 import com.tmdt.shop_service.modules.laptop.application.dto.LaptopDto;
@@ -10,6 +11,7 @@ import com.tmdt.shop_service.modules.laptop.application.request.UpdateLaptopRequ
 import com.tmdt.shop_service.modules.laptop.domain.model.Laptop;
 import com.tmdt.shop_service.modules.laptop.domain.repo.LaptopRepo;
 import com.tmdt.shop_service.utils.Constant;
+import com.tmdt.shop_service.utils.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -41,7 +44,8 @@ public class LaptopServiceImpl implements LaptopService {
                 request.getScreenSizeId(),
                 request.getGpuId(),
                 request.getCpuId(),
-                request.getScreenId());
+                request.getScreenId(),
+                StringUtils.generatorSlug(request.getSlug()));
 
         laptop = laptopRepo.save(laptop);
 
@@ -85,7 +89,10 @@ public class LaptopServiceImpl implements LaptopService {
     public LaptopDto getById(Long id) {
         Laptop laptop = laptopRepo.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Laptop Not Found"));
-        return LaptopMapper.INSTANCE.toDto(laptop);
+        List<AttachDto> attachDtos = attachService.getAttachDtoForEntity(id, AttachType.LAP_TOP);
+        var result = LaptopMapper.INSTANCE.toDto(laptop);
+        result.setAttaches(attachDtos);
+        return result;
     }
 
     @Override

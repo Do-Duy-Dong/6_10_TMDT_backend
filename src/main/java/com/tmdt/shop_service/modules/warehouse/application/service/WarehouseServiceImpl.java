@@ -7,6 +7,8 @@ import com.tmdt.shop_service.modules.warehouse.application.request.UpdateWarehou
 import com.tmdt.shop_service.modules.warehouse.domain.model.Warehouse;
 import com.tmdt.shop_service.modules.warehouse.domain.repo.WarehouseRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +51,8 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<WarehouseDto> getAllWarehouses() {
-        return warehouseMapper.toDtoList(warehouseRepo.findAll());
+    public Page<WarehouseDto> getAllWarehousesByParams(Pageable pageable, String nameCt, Integer isActive) {
+        return warehouseRepo.getAllWarehousesByParams(pageable, nameCt, isActive);
     }
 
     @Override

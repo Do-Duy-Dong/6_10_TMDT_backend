@@ -14,4 +14,5 @@ public interface JpaStoreModelRepo extends JpaRepository<StoreModel, Long> {
     List<StoreModel> findByWarehouseId(Long warehouseId);
     Optional<StoreModel> findBySerialNumber(String serialNumber);
     Page<StoreModel> findByWarehouseIdAndStatus(Pageable pageable, Long warehouseId, StoreModelStatus status);
+    List<StoreModel> findBySerialNumberIn(List<String> serialNumbers);
 }

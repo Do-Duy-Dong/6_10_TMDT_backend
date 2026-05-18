@@ -57,4 +57,7 @@ public class Laptop extends AuditableEntity {
 
     @Column(name = "screen_id", nullable = false)
     private Long screenId;
+
+    @Column(name = "slug", nullable = false)
+    private String slug;
 }

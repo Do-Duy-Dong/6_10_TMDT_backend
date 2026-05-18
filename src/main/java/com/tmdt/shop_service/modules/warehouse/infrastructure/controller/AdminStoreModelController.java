@@ -1,6 +1,7 @@
 package com.tmdt.shop_service.modules.warehouse.infrastructure.controller;
 
 import com.tmdt.shop_service.core.dto.CollectionResponse;
+import com.tmdt.shop_service.modules.warehouse.application.dto.CountStoreModelResponse;
 import com.tmdt.shop_service.modules.warehouse.application.dto.StoreModelDto;
 import com.tmdt.shop_service.modules.warehouse.application.request.CreateStoreModelRequest;
 import com.tmdt.shop_service.modules.warehouse.application.service.StoreModelService;
@@ -17,14 +18,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin/store-models")
+@RequestMapping("/v1/admin/store-models")
 @RequiredArgsConstructor
 public class AdminStoreModelController {
     private final StoreModelService storeModelService;
 
     @PostMapping
-    public ResponseEntity<StoreModelDto> createStoreModel(@RequestBody @Valid CreateStoreModelRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(storeModelService.createStoreModel(request));
+    public ResponseEntity createStoreModel(@RequestBody @Valid CreateStoreModelRequest request) {
+        storeModelService.createStoreModel(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/{id}")
@@ -33,12 +35,25 @@ public class AdminStoreModelController {
     }
 
     @GetMapping
-    public CollectionResponse<StoreModelDto> getAllStoreModels() {
-        var result = storeModelService.getAllStoreModels();
+    public CollectionResponse<CountStoreModelResponse> getStoreModels(
+            @PageableDefault(size = 10, page = 0, sort = "create_at", direction = Sort.Direction.DESC)
+            Pageable pageable,
+            @RequestParam(name = "nameLaptop:ct", required = false) String nameLaptopCt,
+            @RequestParam(name = "warehouseId:eq", required = false) Long warehouseIdEq,
+            @RequestParam(name = "status:in", required = false) List<StoreModelStatus> status) {
+        if (status == null) {
+            status = List.of(StoreModelStatus.NEW);
+        }
+        var result = storeModelService.getStoreModelsByParams(
+                pageable,
+                nameLaptopCt,
+                warehouseIdEq,
+                status);
+        Integer nextPageToken = result.hasNext() ? result.getNumber() + 1 : null;
         return new CollectionResponse<>(
-                result,
-                null,
-                (long) result.size());
+                result.getContent(),
+                nextPageToken,
+                result.getTotalElements());
     }
 
     @GetMapping("/warehouse/{warehouseId}")

@@ -39,4 +39,10 @@ public class AttachServiceImpl implements AttachService {
         attachRepository.saveAll(attaches);
         return AttachMapper.INSTANCE.toDtoList(attaches);
     }
+
+    @Override
+    public List<AttachDto> getAttachDtoForEntity(Long entityId, AttachType entityType) {
+        var result = attachRepository.findAttachByEntity(entityId, entityType);
+        return AttachMapper.INSTANCE.toDtoList(result);
+    }
 }

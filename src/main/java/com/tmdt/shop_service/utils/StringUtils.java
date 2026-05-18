@@ -3,6 +3,8 @@ package com.tmdt.shop_service.utils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class StringUtils {
@@ -37,5 +39,10 @@ public class StringUtils {
         }
         paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset();
         return paging;
+    }
+
+    public static String generatorSlug(String baseSlug) {
+        LocalDateTime now = LocalDateTime.now();
+        return baseSlug + "_" + now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 }

@@ -1,6 +1,8 @@
 package com.tmdt.shop_service.modules.warehouse.application.service;
 
+import com.tmdt.shop_service.core.exception.DuplicateResourceException;
 import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
+import com.tmdt.shop_service.modules.warehouse.application.dto.CountStoreModelResponse;
 import com.tmdt.shop_service.modules.warehouse.application.dto.StoreModelDto;
 import com.tmdt.shop_service.modules.warehouse.application.mapper.StoreModelMapper;
 import com.tmdt.shop_service.modules.warehouse.application.request.CreateStoreModelRequest;
@@ -24,18 +26,21 @@ public class StoreModelServiceImpl implements StoreModelService {
     private final StoreModelMapper storeModelMapper;
 
     @Override
-    public StoreModelDto createStoreModel(CreateStoreModelRequest request) {
-        if (storeModelRepo.findBySerialNumber(request.getSerialNumber()).isPresent()) {
-            throw new RuntimeException("Serial number already exists");
+    public List<StoreModelDto> createStoreModel(CreateStoreModelRequest request) {
+        if (!storeModelRepo.findBySerialNumbers(request.getSerialNumbers()).isEmpty()) {
+            throw new DuplicateResourceException("SN của máy đã tồn tại");
         }
         
-        StoreModel storeModel = new StoreModel();
-        storeModel.setWarehouseId(request.getWarehouseId());
-        storeModel.setSerialNumber(request.getSerialNumber());
-        storeModel.setLaptopId(request.getLaptopId());
-        storeModel.setStatus(request.getStatus());
+        List<StoreModel> storeModels = request.getSerialNumbers().stream().map(serialNumber -> {
+            StoreModel storeModel = new StoreModel();
+            storeModel.setWarehouseId(request.getWarehouseId());
+            storeModel.setSerialNumber(serialNumber);
+            storeModel.setLaptopId(request.getLaptopId());
+            storeModel.setStatus(request.getStatus());
+            return storeModel;
+        }).toList();
         
-        return storeModelMapper.toDto(storeModelRepo.save(storeModel));
+        return storeModelMapper.toDtoList(storeModelRepo.saveAll(storeModels));
     }
 
     @Override
@@ -47,9 +52,8 @@ public class StoreModelServiceImpl implements StoreModelService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<StoreModelDto> getAllStoreModels() {
-        return storeModelMapper.toDtoList(storeModelRepo.findAll());
+    public Page<CountStoreModelResponse> getStoreModelsByParams(Pageable pageable, String nameCt, Long warehouseIdEq, List<StoreModelStatus> statusIn) {
+        return storeModelRepo.getStoreModelByParams(pageable, nameCt, warehouseIdEq, statusIn);
     }
 
     @Override

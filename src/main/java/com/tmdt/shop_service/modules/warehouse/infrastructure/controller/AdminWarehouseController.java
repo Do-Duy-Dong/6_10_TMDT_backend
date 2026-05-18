@@ -7,13 +7,17 @@ import com.tmdt.shop_service.modules.warehouse.application.request.UpdateWarehou
 import com.tmdt.shop_service.modules.warehouse.application.service.WarehouseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin/warehouses")
+@RequestMapping("/v1/admin/warehouses")
 @RequiredArgsConstructor
 public class AdminWarehouseController {
     private final WarehouseService warehouseService;
@@ -34,12 +38,17 @@ public class AdminWarehouseController {
     }
 
     @GetMapping
-    public CollectionResponse<WarehouseDto> getAllWarehouses() {
-        var result = warehouseService.getAllWarehouses();
-        return new CollectionResponse<>(
-                result,
-                null,
-                (long) result.size());
+    public CollectionResponse<WarehouseDto> getAllWarehouses(
+            @PageableDefault(size = 10, page = 0, sort = "create_at", direction = Sort.Direction.DESC)
+            Pageable pageable,
+            @RequestParam(name = "name:ct", required = false) String nameCt,
+            @RequestParam(name = "isActive", required = false) Integer isActive) {
+        Page result = warehouseService.getAllWarehousesByParams(pageable, nameCt, isActive);
+        Integer nextPageToken = result.hasNext() ? result.getNumber() + 1 : null;
+        return new CollectionResponse<WarehouseDto>(
+                result.getContent(),
+                nextPageToken,
+                result.getTotalElements());
     }
 
     @DeleteMapping("/{id}")

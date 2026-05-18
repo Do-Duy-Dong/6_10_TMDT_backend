@@ -46,4 +46,7 @@ public class CreateLaptopRequest {
 
     @NotNull
     private Long screenId;
+
+    @NotNull
+    private String slug;
 }

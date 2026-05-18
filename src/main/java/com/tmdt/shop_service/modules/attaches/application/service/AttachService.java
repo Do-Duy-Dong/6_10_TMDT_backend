@@ -10,4 +10,6 @@ public interface AttachService {
     AttachDto create(CreateAttachRequest request, Long ownerId);
 
     List<AttachDto> assignAttachesForEntity(List<Long> attachIds, Long entityId, AttachType entityType);
+
+    List<AttachDto> getAttachDtoForEntity(Long entityId, AttachType entityType);
 }
