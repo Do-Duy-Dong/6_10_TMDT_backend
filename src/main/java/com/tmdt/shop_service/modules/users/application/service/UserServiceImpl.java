@@ -1,12 +1,15 @@
 package com.tmdt.shop_service.modules.users.application.service;
 
 import com.tmdt.shop_service.core.exception.DuplicateResourceException;
+import com.tmdt.shop_service.modules.users.application.dto.UserDto;
+import com.tmdt.shop_service.modules.users.application.mapper.UserMapper;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.modules.users.domain.repo.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,5 +39,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<Users> findById(Long userId) {
         return usersRepository.findById(userId);
+    }
+
+    @Override
+    public List<UserDto> findByIdIn(List<Long> userIds) {
+        return UserMapper.INSTANCE.toDtoList(usersRepository.findByIdIn(userIds));
     }
 }

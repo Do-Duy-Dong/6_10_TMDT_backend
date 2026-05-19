@@ -109,4 +109,9 @@ public class LaptopServiceImpl implements LaptopService {
         }
         return LaptopMapper.INSTANCE.toDto(laptop);
     }
+
+    @Override
+    public List<LaptopDto> getLaptopByIds(List<Long> ids) {
+        return LaptopMapper.INSTANCE.toDtoList(laptopRepo.findByIds(ids));
+    }
 }

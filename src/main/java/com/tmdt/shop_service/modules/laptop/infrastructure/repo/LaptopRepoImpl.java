@@ -90,4 +90,9 @@ public class LaptopRepoImpl implements LaptopRepo {
 
         return new PageImpl<>(dtoList, pageable, total);
     }
+
+    @Override
+    public List<Laptop> findByIds(List<Long> ids) {
+        return jpaLaptopRepo.findByIdIn(ids);
+    }
 }

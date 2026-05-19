@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -43,5 +44,10 @@ public class UsersRepositoryImpl implements UsersRepository {
     @Override
     public Optional<Users> findById(Long userId) {
         return jpaUsersRepo.findById(userId);
+    }
+
+    @Override
+    public List<Users> findByIdIn(List<Long> userIds) {
+        return jpaUsersRepo.findByIdIn(userIds);
     }
 }

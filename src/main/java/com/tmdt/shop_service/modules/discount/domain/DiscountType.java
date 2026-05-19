@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum DiscountType implements HasEnumValue {
     PERCENT(0),
-    CASH(1);
+    FIXED(1);
 
     private final Integer value;
 
