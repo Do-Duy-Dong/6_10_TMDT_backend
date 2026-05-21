@@ -6,8 +6,7 @@
 
     <changeSet id="1779125283204-1" author="Mai Hien">
         <addColumn tableName="discount">
-            <column name="expiry_to" type="timestamp" />
+            <column name="expiry_from" type="timestamp"/>
         </addColumn>
-        <dropColumn tableName="discount" columnName="expiry_at"/>
     </changeSet>
 </databaseChangeLog>
