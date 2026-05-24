@@ -1,5 +1,6 @@
 package com.tmdt.shop_service.modules.users.domain.repo;
 
+import com.tmdt.shop_service.modules.users.domain.model.Role;
 import com.tmdt.shop_service.modules.users.domain.model.UserRole;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface UserRoleRepository {
     Optional<UserRole> findById(Long id);
 
     List<UserRole> findByUserId(Long userId);
+
+    List<Role> getAllRoleByUserId(Long userId);
 }

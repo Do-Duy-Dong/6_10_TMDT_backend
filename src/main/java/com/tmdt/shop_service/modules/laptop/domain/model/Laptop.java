@@ -33,4 +33,31 @@ public class Laptop extends AuditableEntity {
 
     @Column(name = "original_price", nullable = false)
     private BigDecimal originalPrice;
+
+    @Column(name = "parent_id")
+    private Long parentId;
+
+    @Column(name = "brand_id", nullable = false)
+    private Long brandId;
+
+    @Column(name = "ram_id", nullable = false)
+    private Long ramId;
+
+    @Column(name = "storage_id", nullable = false)
+    private Long storageId;
+
+    @Column(name = "screen_size_id", nullable = false)
+    private Long screenSizeId;
+
+    @Column(name = "gpu_id")
+    private Long gpuId;
+
+    @Column(name = "cpu_id", nullable = false)
+    private Long cpuId;
+
+    @Column(name = "screen_id", nullable = false)
+    private Long screenId;
+
+    @Column(name = "slug", nullable = false)
+    private String slug;
 }

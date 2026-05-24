@@ -68,7 +68,7 @@ public class LaptopRepoImpl implements LaptopRepo {
         }
 
         countSql += condition;
-        selectSql += condition + StringUtils.genDirection(sortFields, pageable);
+        selectSql += condition + StringUtils.genDirection(sortFields, pageable, null);
 
         Long total = paramterJdbcTemplate.queryForObject(countSql, params, Long.class);
 
@@ -89,5 +89,10 @@ public class LaptopRepoImpl implements LaptopRepo {
         });
 
         return new PageImpl<>(dtoList, pageable, total);
+    }
+
+    @Override
+    public List<Laptop> findByIds(List<Long> ids) {
+        return jpaLaptopRepo.findByIdIn(ids);
     }
 }

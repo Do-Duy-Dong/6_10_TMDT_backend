@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1778950838459-1" author="Mai Hien">
+        <createTable tableName="base_category">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_base_category"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(250)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="unique_code_base_category"/>
+            </column>
+            <column name="is_active" type="int4" defaultValueComputed="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="create_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

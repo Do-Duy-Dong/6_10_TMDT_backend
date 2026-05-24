@@ -28,4 +28,7 @@ public class Post extends AuditableEntity {
     @Column(name = "status")
     @Convert(converter = PostStatus.PostStatusConverter.class)
     private PostStatus status;
+
+    @Column(name = "slug")
+    private String slug;
 }

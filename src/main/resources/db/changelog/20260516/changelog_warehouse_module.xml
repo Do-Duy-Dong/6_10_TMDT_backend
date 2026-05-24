@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1778920489211-1" author="Antigravity">
+        <createTable tableName="warehouse">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_active" type="int" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1778920483316-1" author="Mai Hien">
+        <createTable tableName="store_model">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="warehouse_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_store_model_warehouse" referencedTableName="warehouse" referencedColumnNames="id"/>
+            </column>
+            <column name="laptop_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_store_model_laptop" referencedTableName="laptop" referencedColumnNames="id"/>
+            </column>
+            <column name="serial_number" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="status" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

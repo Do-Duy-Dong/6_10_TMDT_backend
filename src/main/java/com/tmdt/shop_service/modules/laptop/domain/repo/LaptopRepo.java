@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public interface LaptopRepo {
@@ -21,4 +22,6 @@ public interface LaptopRepo {
             Integer isActive,
             BigDecimal originalPriceGe,
             BigDecimal originalPriceLe);
+
+    List<Laptop> findByIds(List<Long> ids);
 }

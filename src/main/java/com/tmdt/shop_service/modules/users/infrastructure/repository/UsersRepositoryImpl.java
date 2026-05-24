@@ -1,6 +1,5 @@
 package com.tmdt.shop_service.modules.users.infrastructure.repository;
 
-import com.tmdt.shop_service.modules.users.domain.model.Role;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.modules.users.domain.repo.UsersRepository;
 import com.tmdt.shop_service.modules.users.infrastructure.jpa.JpaUsersRepo;
@@ -41,4 +40,14 @@ public class UsersRepositoryImpl implements UsersRepository {
 //    public List<Role> getAllRolesActiveOfUser(Long userId) {
 //        String sql =
 //    }
+
+    @Override
+    public Optional<Users> findById(Long userId) {
+        return jpaUsersRepo.findById(userId);
+    }
+
+    @Override
+    public List<Users> findByIdIn(List<Long> userIds) {
+        return jpaUsersRepo.findByIdIn(userIds);
+    }
 }

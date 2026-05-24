@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1779362076718-1" author="Mai Hien">
+        <sql>
+            insert into users (id, name, gender, is_active, email, phone_number, hash, salt, update_at, create_at, address)
+            values (nextval('users_id_seq') ,'Mai Hiền Admin', 1, 1,'maivanhien244@gmail.com', '0862990701', 'hash', 'salt', now(), now(), null),
+                   (nextval('users_id_seq') ,'Mai Hiền Customer', 1, 1, 'maivanhien154@gmail.com', '0392407025', 'hash', 'salt', now(), now(), null);
+        </sql>
+        <sql>
+            insert into roles (id, name, code, is_active)
+            values (nextval('roles_id_seq'), 'Quản trị', 'ADMIN', 1),
+                   (nextval('roles_id_seq'), 'Người dùng', 'CUSTOMER', 1);
+        </sql>
+        <sql>
+            insert into users_roles (id, user_id, role_id, is_active)
+            values (nextval('users_roles_id_seq'),1, 1, 1), (nextval('users_roles_id_seq'), 2, 2, 1);
+        </sql>
+        <sql>
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'Hãng', 'H_SERVICE_BRAND', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'Tấm nền', 'H_SERVICE_SCREEN', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'Size màn hình', 'H_SERVICE_SCREEN_SIZE', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'RAM', 'H_SERVICE_RAM', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'Ổ cứng', 'H_SERVICE_STORAGE', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'CPU', 'H_SERVICE_CPU', 1, now(), now());
+            INSERT INTO base_category (id, name, code, is_active, create_at, update_at)
+            VALUES (nextval('base_category_id_seq'), 'GPU', 'H_SERVICE_GPU', 1, now(), now());
+        </sql>
+    </changeSet>
+</databaseChangeLog>

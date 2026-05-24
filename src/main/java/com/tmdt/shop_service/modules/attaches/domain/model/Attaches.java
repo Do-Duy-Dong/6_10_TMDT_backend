@@ -25,8 +25,7 @@ public class Attaches extends AuditableEntity {
     private String description;
 
     @Column(name = "is_active")
-    private Integer is_active;
-
+    private Integer isActive;
 
     @Column(name = "type")
     @Convert(converter = AttachType.AttachTypeConverter.class)
@@ -45,4 +44,7 @@ public class Attaches extends AuditableEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "attach_storage_metadata")
     private AttachStorageMetadata attachStorageMetadata;
+
+    @Column(name = "order_number")
+    private Integer orderNumber;
 }

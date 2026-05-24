@@ -9,7 +9,8 @@ public enum AttachType implements HasEnumValue {
     LAP_TOP(1),
     USER(2),
     COMMENT(3),
-    COMPLAINT(4);
+    COMPLAINT(4),
+    POST(5);
 
     private final Integer value;
 
@@ -21,6 +22,9 @@ public enum AttachType implements HasEnumValue {
 
         @Override
         public Integer convertToDatabaseColumn(AttachType attribute) {
+            if  (attribute == null) {
+                return null;
+            }
             return attribute.getValue();
         }
 

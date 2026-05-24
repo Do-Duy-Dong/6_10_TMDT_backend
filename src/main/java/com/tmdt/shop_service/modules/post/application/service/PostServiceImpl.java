@@ -1,6 +1,8 @@
 package com.tmdt.shop_service.modules.post.application.service;
 
 import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
+import com.tmdt.shop_service.modules.attaches.application.service.AttachService;
+import com.tmdt.shop_service.modules.attaches.domain.AttachType;
 import com.tmdt.shop_service.modules.post.application.dto.PostDto;
 import com.tmdt.shop_service.modules.post.application.mapper.PostMapper;
 import com.tmdt.shop_service.modules.post.application.request.CreatePostRequest;
@@ -8,6 +10,7 @@ import com.tmdt.shop_service.modules.post.application.request.UpdatePostRequest;
 import com.tmdt.shop_service.modules.post.domain.PostStatus;
 import com.tmdt.shop_service.modules.post.domain.model.Post;
 import com.tmdt.shop_service.modules.post.domain.repo.PostRepo;
+import com.tmdt.shop_service.utils.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     final PostRepo postRepo;
+    final AttachService attachService;
 
     @Override
     public PostDto create(@NotNull CreatePostRequest request, @NotNull Long userId) {
@@ -32,9 +37,14 @@ public class PostServiceImpl implements PostService {
                 request.getDescription(),
                 userId,
                 null,
-                request.getStatus());
+                request.getStatus(),
+                StringUtils.generatorSlug(request.getSlug()));
 
         post = postRepo.save(post);
+
+        if (request.getAttachIds() != null &&  !request.getAttachIds().isEmpty()) {
+            attachService.assignAttachesForEntity(request.getAttachIds(), post.getId(), AttachType.POST);
+        }
 
         return PostMapper.INSTANCE.toDto(post);
     }
@@ -50,6 +60,7 @@ public class PostServiceImpl implements PostService {
         post.setDescription(request.getDescription());
         post.setUpdateBy(userId);
         post.setStatus(request.getStatus());
+        post.setSlug(StringUtils.generatorSlug(request.getSlug()));
         post  = postRepo.save(post);
         return PostMapper.INSTANCE.toDto(post);
     }

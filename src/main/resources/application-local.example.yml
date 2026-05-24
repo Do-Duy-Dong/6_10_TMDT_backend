@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: shop_service
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/laptop_shop}
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:admin}
+    hikari:
+      leak-detection-threshold: 30000
+      maximum-pool-size: 2
+      validation-timeout: 5000
+      connection-timeout: 10000
+
+  liquibase:
+    enabled: off
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  session:
+    jdbc:
+      initialize-schema: always
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:client_id}
+            client-secret: ${GOOGLE_SECRET:google_secret}
+            redirect-uri: ${REDIRECT_URI:redirect_uri}
+            scope:
+              - email
+              - profile
+
+server:
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: "/swagger-ui.html"
+    operations-sorter: method
+  api-docs:
+    resolve-schema-properties: true
+    resolve-extensions-properties: true
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:8080,http://localhost:3000}
+
+jwt:
+  path:
+    private: private-key_pkcs8.pem
+    public: public-key.pem
+  expriry: 500000
+
+aws:
+  region: ${REGION:us-east-1}
+  access: ${ACCESS_KEY_AWS:access}
+  secret: ${SECRET_KEY_AWS:secret}
+  bucket: ${BUCKET_AWS:bucket}

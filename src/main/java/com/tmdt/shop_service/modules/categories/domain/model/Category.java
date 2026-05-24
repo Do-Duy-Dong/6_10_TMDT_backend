@@ -23,5 +23,8 @@ public class Category extends AuditableEntity {
     private String code;
 
     @Column(name = "is_active")
-    private Integer is_active;
+    private Integer isActive;
+
+    @Column(name = "base_code", nullable = false, comment = "refer đến base category")
+    private String baseCode;
 }

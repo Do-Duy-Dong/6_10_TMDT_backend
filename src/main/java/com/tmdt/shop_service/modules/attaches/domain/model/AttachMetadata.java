@@ -16,7 +16,7 @@ public class AttachMetadata implements Serializable {
     @Serial private static final long serialVersionUID = 1L;
 
     String fileName;
-    String filePath;
+    String keyName;
     String contentType;
-    String sizeOfBytes;
+    Long sizeOfBytes;
 }
