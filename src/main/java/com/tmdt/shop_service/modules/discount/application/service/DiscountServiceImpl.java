@@ -129,7 +129,7 @@ public class DiscountServiceImpl implements DiscountService {
             LocalDateTime expiryAtGe,
             LocalDateTime expiryAtLe,
             Long userId,
-            Long laptopId) {
+            List<Long> laptopId) {
         return discountRepo.getList(pageable, nameCt, codeEq, typeEq, isActive, expiryAtGe, expiryAtLe, userId, laptopId);
     }
 }

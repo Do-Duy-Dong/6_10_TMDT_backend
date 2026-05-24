@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class DiscountController {
                             sort = "create_at",
                             direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal CustomUserDetail userDetail,
-            @RequestParam(value = "laptopId:eq", required = false) Long laptopIdEq,
+            @RequestParam(value = "laptopId:in", required = false) List<Long> laptopIdIn,
             @RequestParam(value = "name:ct", required = false) String nameCt,
             @RequestParam(value = "code:eq", required = false) String codeEq,
             @RequestParam(value = "expiryAt:ge", required = false) LocalDateTime expiryAtGe,
@@ -53,7 +54,7 @@ public class DiscountController {
                 expiryAtGe,
                 expiryAtLe,
                 userDetail.getId(),
-                laptopIdEq);
+                laptopIdIn);
         Integer nextPage = page.hasNext() ? page.getNumber() + 1 : null;
         return new CollectionResponse<DiscountDto>(
                 page.getContent(),

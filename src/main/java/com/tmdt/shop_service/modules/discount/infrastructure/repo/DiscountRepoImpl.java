@@ -55,7 +55,7 @@ public class DiscountRepoImpl implements DiscountRepo {
                                      LocalDateTime expiryAtGe,
                                      LocalDateTime expiryAtLe,
                                      Long userid,
-                                     Long laptopIdEq) {
+                                     List<Long> laptopIdIn) {
         Map<String, Object> params = new HashMap<>();
         String selectSql = "select * from discount \n";
         String countSql = "select count(*) from discount \n";
@@ -90,11 +90,11 @@ public class DiscountRepoImpl implements DiscountRepo {
             condition += "  and (user_ids @> to_jsonb(:userId::bigint) or user_ids is null or jsonb_array_length(user_ids) = 0)\n";
             params.put("userId", userid);
         }
-        if (laptopIdEq != null) {
-            condition += "  and (module_ids @> to_jsonb(:laptopId::bigint) or module_ids is null or jsonb_array_length(module_ids) = 0)\n";
-            params.put("laptopId", laptopIdEq);
+        if (laptopIdIn != null && !laptopIdIn.isEmpty()) {
+            condition += "  and (module_ids @> to_jsonb(:laptopId) or module_ids is null or jsonb_array_length(module_ids) = 0)\n";
+            params.put("laptopId", laptopIdIn);
         }
-        if (userid != null || laptopIdEq != null) {
+        if (userid != null || (laptopIdIn != null && !laptopIdIn.isEmpty())) {
             condition += "  and quantity > 0\n" +
                     "       and is_active = 1\n" +
                     "       and (expiry_from is null or expiry_from >= now())\n" +
