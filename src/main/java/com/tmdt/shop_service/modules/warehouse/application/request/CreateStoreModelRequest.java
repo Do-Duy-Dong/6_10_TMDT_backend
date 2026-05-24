@@ -18,5 +18,8 @@ public class CreateStoreModelRequest {
     @NotNull(message = "Laptop ID không được để trống")
     private Long laptopId;
 
+    @NotNull(message = "Option ID không được để trống")
+    private Long optionId;
+
     private StoreModelStatus status = StoreModelStatus.NEW;
 }

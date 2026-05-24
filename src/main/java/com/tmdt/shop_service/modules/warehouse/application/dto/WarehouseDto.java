@@ -17,4 +17,5 @@ public class WarehouseDto {
     private Integer isActive;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private Long total;
 }

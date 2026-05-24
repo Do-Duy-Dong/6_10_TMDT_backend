@@ -33,4 +33,14 @@ public class AttachRepositoryImpl implements AttachRepository {
     public List<Attaches> findAttachByEntity(Long entityId, AttachType type) {
         return jpaAttachRepository.findByModuleIdAndType(entityId, type);
     }
+
+    @Override
+    public List<Attaches> findAttachByEntities(List<Long> entityIds, AttachType type) {
+        return jpaAttachRepository.findByModuleIdInAndTypeOrderByCreateAtDesc(entityIds, type);
+    }
+
+    @Override
+    public void deleteAll(List<Attaches> attaches) {
+        jpaAttachRepository.deleteAll(attaches);
+    }
 }

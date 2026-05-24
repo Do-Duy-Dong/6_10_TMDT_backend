@@ -74,7 +74,7 @@ public class AdminDiscountController {
             @RequestParam(value = "expiryFrom:ge", required = false) LocalDateTime expiryFromGe,
             @RequestParam(value = "expiryFrom:le", required = false) LocalDateTime expiryFromLe) {
 
-        Page<DiscountDto> page = discountService.getList(pageable, nameCt, codeEq, typeEq, isActive, expiryFromGe, expiryFromLe);
+        Page<DiscountDto> page = discountService.getList(pageable, nameCt, codeEq, typeEq, isActive, expiryFromGe, expiryFromLe, null, null);
         Integer nextPage = page.hasNext() ? page.getNumber() + 1 : null;
         return new CollectionResponse<DiscountDto>(
                 page.getContent(),

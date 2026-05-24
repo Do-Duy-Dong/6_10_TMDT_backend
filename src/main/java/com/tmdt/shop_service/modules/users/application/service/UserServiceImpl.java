@@ -7,6 +7,9 @@ import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.modules.users.domain.repo.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +47,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findByIdIn(List<Long> userIds) {
         return UserMapper.INSTANCE.toDtoList(usersRepository.findByIdIn(userIds));
+    }
+
+    @Override
+    public Page<UserDto> getListByParams(
+            Pageable pageable,
+            String nameCt,
+            String emailCt,
+            String phoneNumberCt,
+            Integer isActive) {
+        return usersRepository.getListByParams(pageable, nameCt, emailCt, phoneNumberCt, isActive);
     }
 }

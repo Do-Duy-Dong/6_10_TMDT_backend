@@ -1,5 +1,6 @@
 package com.tmdt.shop_service.core.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +13,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("message", "Mã này đã tồn tại");
+        errorDetails.put("status", HttpStatus.CONFLICT.value());
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
 
     @ExceptionHandler(UnAuthorizationException.class)
     public ResponseEntity<?> handleUnAuthorizationException(UnAuthorizationException e) {

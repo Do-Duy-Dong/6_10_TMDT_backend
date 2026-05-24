@@ -23,5 +23,7 @@ public interface DiscountRepo {
             DiscountType typeEq,
             Integer isActive,
             LocalDateTime expiryAtGe,
-            LocalDateTime expiryAtLe);
+            LocalDateTime expiryAtLe,
+            Long userId,
+            Long laptopIdEq);
 }

@@ -11,5 +11,11 @@ public interface AttachService {
 
     List<AttachDto> assignAttachesForEntity(List<Long> attachIds, Long entityId, AttachType entityType);
 
+    void detachAttachForEntity(List<Long> attachIds, Long entityId, AttachType entityType);
+
     List<AttachDto> getAttachDtoForEntity(Long entityId, AttachType entityType);
+
+    List<AttachDto> getAttachDtoForEntities(List<Long> entityIds, AttachType entityType);
+
+    List<AttachDto> updateAttachForEntity(Long entityId, AttachType type, List<Long> updateAttachRequests);
 }

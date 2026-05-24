@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1779557229479-1" author="Mai Hien">
+        <sql splitStatements="false">
+            create or replace function get_price_after_sale(original_price numeric, ds discount) returns numeric
+                language plpgsql
+                as
+                $$
+                            DECLARE
+                            discount_amount NUMERIC;
+                    final_price NUMERIC;
+                            begin
+                    if (ds.type = 0) then
+                        discount_amount := original_price * (ds.value) / 100;
+                    elseif ds.type = 1 then
+                        discount_amount := ds.value;
+                            else
+                        discount_amount := 0;
+                            end if;
+
+                    final_price := original_price - discount_amount;
+
+                            return final_price;
+                            end
+                $$;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

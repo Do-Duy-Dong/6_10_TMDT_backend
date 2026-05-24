@@ -29,5 +29,7 @@ public interface DiscountService {
             DiscountType typeEq,
             Integer isActive,
             LocalDateTime expiryAtGe,
-            LocalDateTime expiryAtLe);
+            LocalDateTime expiryAtLe,
+            Long userId,
+            Long laptopId);
 }

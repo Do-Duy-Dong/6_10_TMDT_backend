@@ -37,6 +37,7 @@ public class StoreModelServiceImpl implements StoreModelService {
             storeModel.setSerialNumber(serialNumber);
             storeModel.setLaptopId(request.getLaptopId());
             storeModel.setStatus(request.getStatus());
+            storeModel.setOptionId(request.getOptionId());
             return storeModel;
         }).toList();
         

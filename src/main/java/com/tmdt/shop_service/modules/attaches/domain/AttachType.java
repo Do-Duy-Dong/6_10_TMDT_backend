@@ -10,7 +10,8 @@ public enum AttachType implements HasEnumValue {
     USER(2),
     COMMENT(3),
     COMPLAINT(4),
-    POST(5);
+    POST(5),
+    OPTION_LAPTOP(6);
 
     private final Integer value;
 

@@ -1,5 +1,6 @@
 package com.tmdt.shop_service.modules.discount.application.service;
 
+import com.tmdt.shop_service.core.exception.DuplicateResourceException;
 import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
 import com.tmdt.shop_service.modules.discount.application.dto.DiscountDto;
 import com.tmdt.shop_service.modules.discount.application.mapper.DiscountMapper;
@@ -15,6 +16,7 @@ import com.tmdt.shop_service.modules.users.application.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,14 @@ public class DiscountServiceImpl implements DiscountService {
                 request.getIsActive(),
                 request.getValue());
 
-        discount = discountRepo.save(discount);
+        try {
+            discount = discountRepo.save(discount);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("unique")) {
+                throw new DuplicateResourceException("");
+            }
+            throw new RuntimeException(e);
+        }
 
         return DiscountMapper.INSTANCE.toDto(discount);
     }
@@ -118,7 +127,9 @@ public class DiscountServiceImpl implements DiscountService {
             DiscountType typeEq,
             Integer isActive,
             LocalDateTime expiryAtGe,
-            LocalDateTime expiryAtLe) {
-        return discountRepo.getList(pageable, nameCt, codeEq, typeEq, isActive, expiryAtGe, expiryAtLe);
+            LocalDateTime expiryAtLe,
+            Long userId,
+            Long laptopId) {
+        return discountRepo.getList(pageable, nameCt, codeEq, typeEq, isActive, expiryAtGe, expiryAtLe, userId, laptopId);
     }
 }
