@@ -153,12 +153,12 @@ public class LaptopRepoImpl implements LaptopRepo {
                 "                           or dc.user_ids is null\n" +
                 "                           or dc.module_ids @> to_jsonb(lt.id)\n" +
                 "                           or dc.user_ids @> to_jsonb(cast(:userId as bigint))\n" +
+                "                           and dc.quantity > 0\n" +
+                "                           and (dc.expiry_from is null or dc.expiry_from <= now())\n" +
+                "                           and (dc.expiry_to is null or dc.expiry_to >= now())\n" +
                 "    where 1 = 1\n");
 
         params.put("userId", userId);
-        sql.append("  and dc.quantity > 0\n" +
-                "       and (dc.expiry_from is null or dc.expiry_from >= now())\n" +
-                "       and (dc.expiry_to is null or dc.expiry_to <= now())\n");
         if (nameCt != null && !nameCt.isEmpty()) {
             sql.append("and lower(lt.name) like :nameCt\n");
             params.put("nameCt", StringUtils.likeLowerContainString(nameCt));

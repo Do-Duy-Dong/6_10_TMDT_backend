@@ -30,14 +30,14 @@ public class Discount extends AuditableEntity {
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(name = "user_ids", columnDefinition = "JSON")
+    @Column(name = "user_ids", columnDefinition = "JSONB")
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Long> userIds = new ArrayList<>();
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "module_ids", columnDefinition = "JSON")
+    @Column(name = "module_ids", columnDefinition = "JSONB")
     @JdbcTypeCode(SqlTypes.JSON)
     private List<Long> moduleIds;
 

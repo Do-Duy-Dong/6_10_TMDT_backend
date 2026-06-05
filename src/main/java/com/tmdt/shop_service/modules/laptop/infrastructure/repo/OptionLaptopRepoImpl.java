@@ -1,5 +1,6 @@
 package com.tmdt.shop_service.modules.laptop.infrastructure.repo;
 
+import com.tmdt.shop_service.modules.laptop.domain.model.Laptop;
 import com.tmdt.shop_service.modules.laptop.domain.model.OptionLaptop;
 import com.tmdt.shop_service.modules.laptop.domain.repo.OptionLaptopRepo;
 import com.tmdt.shop_service.modules.laptop.infrastructure.jpa.JpaOptionLaptopRepo;
@@ -44,5 +45,15 @@ public class OptionLaptopRepoImpl implements OptionLaptopRepo {
     @Override
     public List<OptionLaptop> findByLaptopId(Long laptopId) {
         return jpaOptionLaptopRepo.findByLaptopId(laptopId);
+    }
+
+    @Override
+    public List<OptionLaptop> findByIdIn(List<Long> idIn) {
+        return jpaOptionLaptopRepo.findByIdIn(idIn);
+    }
+
+    @Override
+    public List<Laptop> findLaptopByOptionIdIn(List<Long> optionIds) {
+        return jpaOptionLaptopRepo.findLaptopByOptionIdIn(optionIds);
     }
 }

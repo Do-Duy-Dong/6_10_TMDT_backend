@@ -26,4 +26,6 @@ public interface UserService {
             String emailCt,
             String phoneNumberCt,
             Integer isActive);
+
+    UserDto getProfile(Long userId);
 }

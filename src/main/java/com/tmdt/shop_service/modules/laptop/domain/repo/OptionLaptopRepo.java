@@ -1,6 +1,7 @@
 package com.tmdt.shop_service.modules.laptop.domain.repo;
 
 import com.tmdt.shop_service.modules.laptop.application.dto.OptionLaptopDto;
+import com.tmdt.shop_service.modules.laptop.domain.model.Laptop;
 import com.tmdt.shop_service.modules.laptop.domain.model.OptionLaptop;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface OptionLaptopRepo {
     void deleteByLaptopId(Long laptopId);
 
     List<OptionLaptop> findByLaptopId(Long laptopId);
+
+    List<OptionLaptop> findByIdIn(List<Long> idIn);
+
+    List<Laptop> findLaptopByOptionIdIn(List<Long> optionIds);
 }

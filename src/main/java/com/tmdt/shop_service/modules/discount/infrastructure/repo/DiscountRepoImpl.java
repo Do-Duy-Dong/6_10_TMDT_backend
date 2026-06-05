@@ -97,7 +97,7 @@ public class DiscountRepoImpl implements DiscountRepo {
         if (userid != null || (laptopIdIn != null && !laptopIdIn.isEmpty())) {
             condition += "  and quantity > 0\n" +
                     "       and is_active = 1\n" +
-                    "       and (expiry_from is null or expiry_from >= now())\n" +
+                    "       and (expiry_from is null or expiry_from <= now())\n" +
                     "       and (expiry_to is null or expiry_to >= now())\n";
         }
 
@@ -160,5 +160,10 @@ public class DiscountRepoImpl implements DiscountRepo {
         }
         paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset() + "\n";
         return paging;
+    }
+
+    @Override
+    public int minus(Long discountId) {
+        return jpaDiscountRepo.minusDiscount(discountId);
     }
 }

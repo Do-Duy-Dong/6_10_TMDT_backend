@@ -108,7 +108,8 @@ public class UsersRepositoryImpl implements UsersRepository {
                     null,
                     result.getInt("is_active"),
                     result.getString("email"),
-                    result.getString("phone_number"));
+                    result.getString("phone_number"),
+                    null);
         }).stream().toList();
 
         return new PageImpl<>(userDtos, pageable, totalElemts.get());

@@ -83,4 +83,22 @@ public class StoreModelServiceImpl implements StoreModelService {
         storeModel.setStatus(status);
         storeModelRepo.save(storeModel);
     }
+
+    @Override
+    public List<StoreModel> getListStoreModelByParams(
+            Long optionId,
+            int number,
+            StoreModelStatus status) {
+        return storeModelRepo.getListStoreModelByParams(optionId, number, status);
+    }
+
+    @Override
+    public void updateStatus(List<Long> storeModelIds, StoreModelStatus status) {
+        storeModelRepo.updateStatusByIds(storeModelIds, status);
+    }
+
+    @Override
+    public List<StoreModel> findByListId(List<Long> ids) {
+        return storeModelRepo.findByListId(ids);
+    }
 }

@@ -162,9 +162,9 @@ public class LaptopServiceImpl implements LaptopService {
         for (AttachDto attachDto: attachDtos) {
             PublicLaptopDto publicLaptopDto = publicLaptopDtoMap.get(attachDto.moduleId());
             if (publicLaptopDto.getAttaches() == null || publicLaptopDto.getAttaches().isEmpty()) {
-                publicLaptopDto.setAttaches(new ArrayList<>(attachDtos));
+                publicLaptopDto.setAttaches(List.of(attachDto));
             } else if (publicLaptopDto.getAttaches().getFirst().orderNumber() > attachDto.orderNumber()){
-                publicLaptopDto.setAttaches(attachDtos);
+                publicLaptopDto.setAttaches(List.of(attachDto));
             }
         }
 

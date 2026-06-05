@@ -27,4 +27,6 @@ public interface DiscountRepo {
             LocalDateTime expiryAtLe,
             Long userId,
             List<Long> laptopIdEq);
+
+    int minus(Long discountId);
 }

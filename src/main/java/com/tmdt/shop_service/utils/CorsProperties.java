@@ -9,7 +9,7 @@ import java.util.List;
 
 @Setter
 @Getter
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "cors")
 public class CorsProperties {
     private List<String> allowedOrigins;
