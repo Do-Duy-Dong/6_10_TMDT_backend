@@ -74,6 +74,7 @@ public class SepayService implements PaymentService{
             rawValue.put("order_description", "Thanh toán đơn hàng #" + paymentUUID);
             rawValue.put("order_invoice_number", paymentUUID.toString());
             rawValue.put("customer_id", customerId.toString());
+            rawValue.put("success_url", "http://localhost:3000/public/laptops");
 
             String signed = genSignedString(rawValue, sepayConfig.getSecretKey());
             rawValue.put("signature", signed);
