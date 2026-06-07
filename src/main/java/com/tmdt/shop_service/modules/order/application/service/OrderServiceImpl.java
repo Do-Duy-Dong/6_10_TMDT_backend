@@ -41,10 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -295,8 +292,13 @@ public class OrderServiceImpl implements OrderService {
         process.setUpdateBy(adminId);
         processRepo.save(process);
 
+        List<OrderDetail> orderDetails = orderDetailRepo.findByOrderId(orderId);
+        List<Long> storeModelIds = orderDetails.stream().map(OrderDetail::getStoreModelIds)
+                .flatMap(Collection::stream)
+                .toList();
         // Update payment status to SUCCESS if order is completed
         if (status == ProcessStatus.HOAN_THANH) {
+            storeModelService.updateStatus(storeModelIds, StoreModelStatus.SOLD);
             paymentDetailRepo.findByOrderId(orderId).ifPresent(payment -> {
                 payment.setStatus(PaymentStatus.SUCCESS);
                 paymentDetailRepo.save(payment);
@@ -304,11 +306,6 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (Objects.equals(status, ProcessStatus.HUY)) {
-            List<OrderDetail> orderDetails = orderDetailRepo.findByOrderId(orderId);
-            List<Long> storeModelIds = new ArrayList<>();
-            for (OrderDetail detail: orderDetails) {
-                storeModelIds.addAll(detail.getStoreModelIds());
-            }
             storeModelService.updateStatus(storeModelIds, StoreModelStatus.NEW);
         }
 

@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 public enum ReportType implements HasEnumValue {
-    BAO_CAO_DOANH_THU(1);
+    BAO_CAO_DOANH_THU(1),
+    BAO_CAO_TON_KHO(2),
+    TON_KHO_HIEN_TAI(3);
 
     private final Integer value;
 

@@ -20,12 +20,20 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReportController {
     final ReportService reportService;
+    final ReportRepo reportRepo;
 
     @GetMapping
-    public Map<Object, Object> report(
+    public Object report(
             @RequestParam(name = "type") ReportType type,
             @RequestParam(name = "fromDate") LocalDate fromDate,
-            @RequestParam(name = "toDate") LocalDate toDate) {
-        return reportService.report(type, fromDate, toDate);
+            @RequestParam(name = "toDate") LocalDate toDate,
+            @RequestParam(name = "warehouseId", required = false) Long warehouseId
+    ) {
+        return switch (type) {
+            case BAO_CAO_DOANH_THU -> reportRepo.baoCaoDoanhThu(fromDate, toDate);
+            case BAO_CAO_TON_KHO -> reportRepo.baoCaoTonKho(warehouseId, fromDate, toDate);
+            case TON_KHO_HIEN_TAI -> reportRepo.soLuongTonKhoHienTai();
+            default -> throw new IllegalArgumentException("Loại báo cáo không hợp lệ");
+        };
     }
 }
