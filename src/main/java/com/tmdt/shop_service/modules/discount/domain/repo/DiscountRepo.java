@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface DiscountRepo {
@@ -23,5 +24,9 @@ public interface DiscountRepo {
             DiscountType typeEq,
             Integer isActive,
             LocalDateTime expiryAtGe,
-            LocalDateTime expiryAtLe);
+            LocalDateTime expiryAtLe,
+            Long userId,
+            List<Long> laptopIdEq);
+
+    int minus(Long discountId);
 }

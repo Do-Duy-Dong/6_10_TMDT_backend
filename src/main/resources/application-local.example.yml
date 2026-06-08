@@ -36,6 +36,9 @@ spring:
               - email
               - profile
 
+  jackson:
+    time-zone: UTC
+
 server:
   port: 8080
 

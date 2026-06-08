@@ -17,4 +17,5 @@ public record AttachDto(
         AttachMetadata attachMetadata,
         AttachStorageMetadata attachStorageMetadata,
         LocalDateTime updateAt,
-        LocalDateTime createAt) {}
+        LocalDateTime createAt,
+        Integer orderNumber) {}

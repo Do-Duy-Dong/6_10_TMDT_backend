@@ -7,17 +7,20 @@ import com.tmdt.shop_service.modules.auth.application.request.GoogleSsoRequest;
 import com.tmdt.shop_service.modules.auth.infrastucture.sso.GoogleSso;
 import com.tmdt.shop_service.modules.users.application.service.UserService;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
+import com.tmdt.shop_service.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class SsoServiceImpl implements SsoService {
     final GoogleSso googleSso;
     final UserService userService;
+    final JwtUtils jwtUtils;
 
     @Override
     public String getAuthorizationUrl(String logicType) {
@@ -39,6 +42,11 @@ public class SsoServiceImpl implements SsoService {
                     .build();
         }
 
-        return users;
+        String accessToken = jwtUtils.generateAccessToken(users);
+
+        return new AuthTokenDto(
+                accessToken,
+                UUID.randomUUID().toString(),
+                jwtUtils.getExpriry());
     }
 }

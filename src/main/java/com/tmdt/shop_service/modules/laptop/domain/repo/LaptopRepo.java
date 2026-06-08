@@ -1,7 +1,9 @@
 package com.tmdt.shop_service.modules.laptop.domain.repo;
 
 import com.tmdt.shop_service.modules.laptop.application.dto.LaptopDto;
+import com.tmdt.shop_service.modules.laptop.application.dto.PublicLaptopDto;
 import com.tmdt.shop_service.modules.laptop.domain.model.Laptop;
+import com.tmdt.shop_service.modules.warehouse.application.dto.WarehouseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,4 +26,21 @@ public interface LaptopRepo {
             BigDecimal originalPriceLe);
 
     List<Laptop> findByIds(List<Long> ids);
+
+    Page<PublicLaptopDto> getPublicLaptopDtoByParams(
+            Pageable pageable,
+            String nameCt,
+            Long brandId,
+            Long cpuId,
+            Long ramId,
+            Long storageId,
+            Long priceGe,
+            Long priceLe,
+            Long userId);
+
+    Optional<Laptop> findBySlug(String slug);
+
+    List<Laptop> findLaptopsByParentIdInOrIdIn(List<Long> parentId, List<Long> IdIn);
+
+    List<WarehouseDto> getStoreModelDtoHasProduct(Long laptopId, Long optionId);
 }

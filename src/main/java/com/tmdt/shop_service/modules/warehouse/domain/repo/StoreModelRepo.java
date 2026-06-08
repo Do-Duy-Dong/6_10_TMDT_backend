@@ -26,4 +26,13 @@ public interface StoreModelRepo {
     Page<CountStoreModelResponse> getStoreModelByParams(Pageable pageable, String nameLaptopCt, Long warehouseId, List<StoreModelStatus> statusIn);
 
     List<StoreModel> saveAll(List<StoreModel> storeModels);
+
+    List<StoreModel> getListStoreModelByParams(
+            Long optionId,
+            int number,
+            StoreModelStatus status);
+
+    void updateStatusByIds(List<Long> storeModelIds, StoreModelStatus status);
+
+    List<StoreModel> findByListId(List<Long> ids);
 }

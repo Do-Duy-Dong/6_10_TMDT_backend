@@ -3,6 +3,7 @@ package com.tmdt.shop_service.modules.laptop.infrastructure.controller;
 import com.tmdt.shop_service.core.dto.CollectionResponse;
 import com.tmdt.shop_service.modules.auth.CustomUserDetail;
 import com.tmdt.shop_service.modules.laptop.application.dto.LaptopDto;
+import com.tmdt.shop_service.modules.laptop.application.dto.OptionLaptopDto;
 import com.tmdt.shop_service.modules.laptop.application.request.CreateLaptopRequest;
 import com.tmdt.shop_service.modules.laptop.application.request.UpdateLaptopRequest;
 import com.tmdt.shop_service.modules.laptop.application.service.LaptopService;
@@ -64,12 +65,7 @@ public class AdminLaptopController {
 
     @GetMapping
     public CollectionResponse<LaptopDto> getList(
-            @ParameterObject
-            @PageableDefault(
-                    page = 0,
-                    size = 10,
-                    sort = "create_at",
-                    direction = Sort.Direction.DESC) Pageable pageable,
+            @ParameterObject Pageable pageable,
             @RequestParam(value = "name:ct", required = false) String nameCt,
             @RequestParam(value = "isActive", required = false) Integer isActive,
             @RequestParam(value = "originalPrice:ge", required = false) BigDecimal originalPriceGe,
@@ -87,5 +83,14 @@ public class AdminLaptopController {
     public ResponseEntity<LaptopDto> getLaptopById(@PathVariable Long id) {
         var result = laptopService.getById(id);
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{id}/options")
+    public CollectionResponse<OptionLaptopDto> getOptionsOfLaptop(@PathVariable Long id) {
+        var result = laptopService.getOptionsOfLaptop(id);
+        return new CollectionResponse<>(
+                result,
+                null,
+                (long) result.size());
     }
 }

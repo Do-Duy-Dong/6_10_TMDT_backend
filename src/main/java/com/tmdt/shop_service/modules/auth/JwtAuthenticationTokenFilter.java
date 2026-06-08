@@ -42,13 +42,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         boolean validateToken = jwtUtils.validateToken(token);
 
         if (!validateToken) {
-            String uri = request.getRequestURI();
-            boolean anyMatch = permitUrls.stream().anyMatch(uri::startsWith);
-            if (anyMatch) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-            throw new ForbiddenException("Token is not valid");
+//            String uri = request.getRequestURI();
+//            boolean anyMatch = permitUrls.stream().anyMatch(uri::startsWith);
+//            if (anyMatch) {
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
+//            throw new ForbiddenException("Token is not valid");
+            filterChain.doFilter(request, response);
+            return;
         }
 
         CustomUserDetail customUserDetail = jwtUtils.parseUserFromToken(token);

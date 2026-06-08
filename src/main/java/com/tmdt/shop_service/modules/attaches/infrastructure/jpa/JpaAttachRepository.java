@@ -13,4 +13,7 @@ public interface JpaAttachRepository extends JpaRepository<Attaches, Long> {
     List<Attaches> findByIdIn(Collection<Long> ids);
 
     List<Attaches> findByModuleIdAndType(Long moduleId, AttachType type);
+
+    List<Attaches> findByModuleIdInAndTypeOrderByCreateAtDesc(List<Long> moduleIds, AttachType type);
+
 }

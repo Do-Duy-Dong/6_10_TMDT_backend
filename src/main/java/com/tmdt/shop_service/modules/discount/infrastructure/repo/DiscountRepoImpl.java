@@ -1,5 +1,7 @@
 package com.tmdt.shop_service.modules.discount.infrastructure.repo;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tmdt.shop_service.modules.discount.application.dto.DiscountDto;
 import com.tmdt.shop_service.modules.discount.domain.DiscountType;
 import com.tmdt.shop_service.modules.discount.domain.model.Discount;
@@ -27,6 +29,7 @@ public class DiscountRepoImpl implements DiscountRepo {
     private final List<String> sortFields = List.of("id", "name", "code", "create_at", "expiry_at");
     final JpaDiscountRepo jpaDiscountRepo;
     final NamedParameterJdbcTemplate paramterJdbcTemplate;
+    final ObjectMapper objectMapper;
 
     @Override
     public Discount save(Discount discount) {
@@ -44,7 +47,15 @@ public class DiscountRepoImpl implements DiscountRepo {
     }
 
     @Override
-    public Page<DiscountDto> getList(Pageable pageable, String nameCt, String codeEq, DiscountType typeEq, Integer isActive, LocalDateTime expiryAtGe, LocalDateTime expiryAtLe) {
+    public Page<DiscountDto> getList(Pageable pageable,
+                                     String nameCt,
+                                     String codeEq,
+                                     DiscountType typeEq,
+                                     Integer isActive,
+                                     LocalDateTime expiryAtGe,
+                                     LocalDateTime expiryAtLe,
+                                     Long userid,
+                                     List<Long> laptopIdIn) {
         Map<String, Object> params = new HashMap<>();
         String selectSql = "select * from discount \n";
         String countSql = "select count(*) from discount \n";
@@ -64,7 +75,7 @@ public class DiscountRepoImpl implements DiscountRepo {
             params.put("expiryAtGe" , expiryAtGe);
         }
         if (expiryAtLe != null) {
-            condition += "  and expiry_to <= :expiryAtLe \n";
+            condition += "  and expiry_from <= :expiryAtLe \n";
             params.put("expiryAtLe", expiryAtLe);
         }
         if (isActive != null) {
@@ -74,6 +85,20 @@ public class DiscountRepoImpl implements DiscountRepo {
         if (typeEq != null) {
             condition += "  and type=:typeEq \n";
             params.put("typeEq", typeEq.getValue());
+        }
+        if (userid != null) {
+            condition += "  and (user_ids @> to_jsonb(:userId::bigint) or user_ids is null or jsonb_array_length(user_ids) = 0)\n";
+            params.put("userId", userid);
+        }
+        if (laptopIdIn != null && !laptopIdIn.isEmpty()) {
+            condition += "  and (module_ids @> to_jsonb(:laptopId) or module_ids is null or jsonb_array_length(module_ids) = 0)\n";
+            params.put("laptopId", laptopIdIn);
+        }
+        if (userid != null || (laptopIdIn != null && !laptopIdIn.isEmpty())) {
+            condition += "  and quantity > 0\n" +
+                    "       and is_active = 1\n" +
+                    "       and (expiry_from is null or expiry_from <= now())\n" +
+                    "       and (expiry_to is null or expiry_to >= now())\n";
         }
 
         countSql += condition;
@@ -88,19 +113,29 @@ public class DiscountRepoImpl implements DiscountRepo {
             Timestamp expiryFrom = rs.getTimestamp("expiry_from");
             Timestamp expiryTo = rs.getTimestamp("expiry_to");
 
-            return DiscountDto.builder()
-                    .id(rs.getLong("id"))
-                    .name(rs.getString("name"))
-                    .code(rs.getString("code"))
-                    .quantity(rs.getInt("quantity"))
-                    .userIds(rs.getObject("user_ids", List.class))
-                    .moduleIds(rs.getObject("module_ids", List.class))
-                    .type(discountTypeConverter.convertToEntityAttribute(rs.getInt("type")))
-                    .updateAt(updateAt != null ? updateAt.toLocalDateTime() : null)
-                    .createAt(createAt != null ? createAt.toLocalDateTime() : null)
-                    .expiryFrom(expiryFrom != null ? expiryFrom.toLocalDateTime() : null)
-                    .expiryTo(expiryTo != null ? expiryTo.toLocalDateTime() : null)
-                    .build();
+            try {
+                String userIdsJson = rs.getString("user_ids");
+                if (userIdsJson == null) userIdsJson = "[]";
+                String moduleIdsJson = rs.getString("module_ids");
+                if (moduleIdsJson == null) moduleIdsJson = "[]";
+                return DiscountDto.builder()
+                        .id(rs.getLong("id"))
+                        .name(rs.getString("name"))
+                        .code(rs.getString("code"))
+                        .quantity(rs.getInt("quantity"))
+                        .value(rs.getLong("value"))
+                        .isActive(rs.getInt("is_active"))
+                        .userIds(objectMapper.readValue(userIdsJson, new TypeReference<List<Long>>() {}))
+                        .moduleIds(objectMapper.readValue(moduleIdsJson, new TypeReference<List<Long>>() {}))
+                        .type(discountTypeConverter.convertToEntityAttribute(rs.getInt("type")))
+                        .updateAt(updateAt != null ? updateAt.toLocalDateTime() : null)
+                        .createAt(createAt != null ? createAt.toLocalDateTime() : null)
+                        .expiryFrom(expiryFrom != null ? expiryFrom.toLocalDateTime() : null)
+                        .expiryTo(expiryTo != null ? expiryTo.toLocalDateTime() : null)
+                        .build();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         return new PageImpl<>(discountDtoList, pageable, total);
@@ -125,5 +160,10 @@ public class DiscountRepoImpl implements DiscountRepo {
         }
         paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset() + "\n";
         return paging;
+    }
+
+    @Override
+    public int minus(Long discountId) {
+        return jpaDiscountRepo.minusDiscount(discountId);
     }
 }

@@ -5,6 +5,7 @@ import com.tmdt.shop_service.modules.warehouse.application.dto.CountStoreModelRe
 import com.tmdt.shop_service.modules.warehouse.application.dto.StoreModelDto;
 import com.tmdt.shop_service.modules.warehouse.application.request.CreateStoreModelRequest;
 import com.tmdt.shop_service.modules.warehouse.domain.StoreModelStatus;
+import com.tmdt.shop_service.modules.warehouse.domain.model.StoreModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,13 @@ public interface StoreModelService {
     void deleteStoreModel(Long id);
 
     void updateStatusForStoreModel(Long id, StoreModelStatus status);
+
+    List<StoreModel> getListStoreModelByParams(
+            Long optionId,
+            int number,
+            StoreModelStatus status);
+
+    void updateStatus(List<Long> storeModelIds, StoreModelStatus status);
+
+    List<StoreModel> findByListId(List<Long> ids);
 }

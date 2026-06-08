@@ -1,6 +1,7 @@
 package com.tmdt.shop_service.modules.discount.infrastructure.controller;
 
 import com.tmdt.shop_service.core.dto.CollectionResponse;
+import com.tmdt.shop_service.modules.auth.CustomUserDetail;
 import com.tmdt.shop_service.modules.discount.application.dto.DiscountDto;
 import com.tmdt.shop_service.modules.discount.application.service.DiscountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,9 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,12 +39,22 @@ public class DiscountController {
                             size = 10,
                             sort = "create_at",
                             direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal CustomUserDetail userDetail,
+            @RequestParam(value = "laptopId:in", required = false) List<Long> laptopIdIn,
             @RequestParam(value = "name:ct", required = false) String nameCt,
             @RequestParam(value = "code:eq", required = false) String codeEq,
             @RequestParam(value = "expiryAt:ge", required = false) LocalDateTime expiryAtGe,
             @RequestParam(value = "expiryAt:le", required = false) LocalDateTime expiryAtLe) {
 
-        Page<DiscountDto> page = discountService.getList(pageable, nameCt, codeEq, null, 1, expiryAtGe, expiryAtLe);
+        Page<DiscountDto> page = discountService.getList(pageable,
+                nameCt,
+                codeEq,
+                null,
+                1,
+                expiryAtGe,
+                expiryAtLe,
+                userDetail.getId(),
+                laptopIdIn);
         Integer nextPage = page.hasNext() ? page.getNumber() + 1 : null;
         return new CollectionResponse<DiscountDto>(
                 page.getContent(),

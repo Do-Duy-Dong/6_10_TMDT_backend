@@ -1,7 +1,6 @@
 package com.tmdt.shop_service.modules.warehouse.infrastructure.repo;
 
 import com.tmdt.shop_service.modules.warehouse.application.dto.CountStoreModelResponse;
-import com.tmdt.shop_service.modules.warehouse.application.dto.StoreModelDto;
 import com.tmdt.shop_service.modules.warehouse.domain.StoreModelStatus;
 import com.tmdt.shop_service.modules.warehouse.domain.model.StoreModel;
 import com.tmdt.shop_service.modules.warehouse.domain.repo.StoreModelRepo;
@@ -144,5 +143,23 @@ public class StoreModelRepoImpl implements StoreModelRepo {
     @Override
     public List<StoreModel> saveAll(List<StoreModel> storeModels) {
         return jpaStoreModelRepo.saveAll(storeModels);
+    }
+
+    @Override
+    public List<StoreModel> getListStoreModelByParams(
+            Long optionId,
+            int number,
+            StoreModelStatus status) {
+        return jpaStoreModelRepo.getListStoreModelByParams(optionId, number, status);
+    }
+
+    @Override
+    public void updateStatusByIds(List<Long> storeModelIds, StoreModelStatus status) {
+        jpaStoreModelRepo.updateStatusByIds(storeModelIds, status);
+    }
+
+    @Override
+    public List<StoreModel> findByListId(List<Long> ids) {
+        return jpaStoreModelRepo.findAllByIdIn(ids);
     }
 }

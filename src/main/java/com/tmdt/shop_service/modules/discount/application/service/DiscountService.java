@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface DiscountService {
     DiscountDto create(@NotNull CreateDiscountRequest request, @NotNull Long userId);
@@ -29,5 +30,7 @@ public interface DiscountService {
             DiscountType typeEq,
             Integer isActive,
             LocalDateTime expiryAtGe,
-            LocalDateTime expiryAtLe);
+            LocalDateTime expiryAtLe,
+            Long userId,
+            List<Long> laptopId);
 }

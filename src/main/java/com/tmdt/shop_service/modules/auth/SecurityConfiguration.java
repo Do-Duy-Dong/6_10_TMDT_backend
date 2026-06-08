@@ -30,6 +30,7 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
+            "/v1/payments/sepay/ipn",
             "/v1/auth/**",
             "/v1/upload/**",
             "/v1/public/**");

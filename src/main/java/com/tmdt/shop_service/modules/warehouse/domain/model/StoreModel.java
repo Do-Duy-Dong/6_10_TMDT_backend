@@ -30,4 +30,7 @@ public class StoreModel extends AuditableEntity {
     @Column(name = "status")
     @Convert(converter = StoreModelStatus.StoreModelStatusConverter.class)
     private StoreModelStatus status;
+
+    @Column(name = "option_id", nullable = false)
+    private Long optionId;
 }

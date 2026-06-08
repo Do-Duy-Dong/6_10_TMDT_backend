@@ -49,4 +49,7 @@ public class CreateLaptopRequest {
 
     @NotNull
     private String slug;
+
+    @NotNull
+    private List<CreateLaptopOptionRequest> options;
 }

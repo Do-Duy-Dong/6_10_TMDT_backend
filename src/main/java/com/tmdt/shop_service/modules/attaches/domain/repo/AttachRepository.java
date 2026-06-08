@@ -13,4 +13,9 @@ public interface AttachRepository {
     void saveAll(List<Attaches> attaches);
 
     List<Attaches> findAttachByEntity(Long entityId, AttachType type);
+
+    List<Attaches> findAttachByEntities(List<Long> entityIds, AttachType type);
+
+
+    void deleteAll(List<Attaches> attaches);
 }

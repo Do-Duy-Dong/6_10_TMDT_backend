@@ -5,18 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
-public class UpdateLaptopRequest {
-    @NotBlank(message = "Tên không được để trống")
-    private String name;
-
-    @NotBlank(message = "Mô tả không được để trống")
-    private String description;
-
-    @NotNull(message = "Trạng thái không được để trống")
-    private Integer isActive;
-
-    @NotNull(message = "Giá không được để trống")
-    private BigDecimal originalPrice;
+public class UpdateLaptopRequest extends CreateLaptopRequest{
 }

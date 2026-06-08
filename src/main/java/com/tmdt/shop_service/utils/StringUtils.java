@@ -36,6 +36,8 @@ public class StringUtils {
         }
         if (hasSort) {
             paging = paging.substring(0, paging.length() - 2) + "\n";
+        } else {
+            paging = "";
         }
         paging += "limit " + pageable.getPageSize() + " offset " + pageable.getOffset();
         return paging;
@@ -44,5 +46,10 @@ public class StringUtils {
     public static String generatorSlug(String baseSlug) {
         LocalDateTime now = LocalDateTime.now();
         return baseSlug + "_" + now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public static String likeLowerContainString(String str) {
+        if (str == null) return "%%";
+        return "%" + str.trim().toLowerCase() + "%";
     }
 }

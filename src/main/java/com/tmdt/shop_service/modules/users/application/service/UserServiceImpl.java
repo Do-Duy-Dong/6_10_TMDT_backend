@@ -1,12 +1,16 @@
 package com.tmdt.shop_service.modules.users.application.service;
 
 import com.tmdt.shop_service.core.exception.DuplicateResourceException;
+import com.tmdt.shop_service.core.exception.ResourceNotFoundException;
 import com.tmdt.shop_service.modules.users.application.dto.UserDto;
 import com.tmdt.shop_service.modules.users.application.mapper.UserMapper;
+import com.tmdt.shop_service.modules.users.domain.model.Role;
 import com.tmdt.shop_service.modules.users.domain.model.Users;
 import com.tmdt.shop_service.modules.users.domain.repo.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     final UsersRepository usersRepository;
+    final RoleService roleService;
+    final UserRoleService userRoleService;
 
     @Override
     public Users findByEmail(String email) {
@@ -44,5 +50,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findByIdIn(List<Long> userIds) {
         return UserMapper.INSTANCE.toDtoList(usersRepository.findByIdIn(userIds));
+    }
+
+    @Override
+    public Page<UserDto> getListByParams(
+            Pageable pageable,
+            String nameCt,
+            String emailCt,
+            String phoneNumberCt,
+            Integer isActive) {
+        return usersRepository.getListByParams(pageable, nameCt, emailCt, phoneNumberCt, isActive);
+    }
+
+    @Override
+    public UserDto getProfile(Long userId) {
+        Users users = findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng"));
+
+        UserDto userDto = UserMapper.INSTANCE.toDto(users);
+
+        List<String> roles = userRoleService.getAllRoleOfUser(userId)
+                .stream().map(Role::getCode).toList();
+        userDto.setRoles(roles);
+
+        return userDto;
     }
 }
